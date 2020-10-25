@@ -1,10 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Login.css";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { auth } from "./firebase";
 
 function Login() {
+  const history = useHistory();
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
+
+  const signIn = (e) => {
+    e.preventDefault();
+    //firebase login
+  };
+
+  const register = (e) => {
+    e.preventDefault();
+    //firebase register
+    auth
+      .createUserWithEmailAndPassword(email, password)
+      .then((auth) => {
+        //success
+        console.log(auth);
+        if (auth) {
+          history.push("/");
+        }
+      })
+      .catch((error) => alert(error.message));
+  };
 
   return (
     <div className="login">
@@ -32,7 +54,13 @@ function Login() {
             onChange={(e) => setpassword(e.target.value)}
           />
 
-          <button className="login__signInButton">Sign in</button>
+          <button
+            type="submit"
+            onClick={signIn}
+            className="login__signInButton"
+          >
+            Sign in
+          </button>
         </form>
         <p>
           By signing-in you agree to the AMAZON CLONE Conditions of Use & Sale.
@@ -40,7 +68,9 @@ function Login() {
           Interest-Based Ads Notice.
         </p>
 
-        <button className="login__registerButton">Create amazon account</button>
+        <button onClick={register} className="login__registerButton">
+          Create amazon account
+        </button>
       </div>
     </div>
   );
